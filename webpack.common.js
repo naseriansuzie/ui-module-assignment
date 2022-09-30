@@ -23,10 +23,18 @@ module.exports = {
         exclude: ['/node_modules/'],
       },
       {
+        test: /\.svg$/,
+        use: '@svgr/webpack',
+      },
+      {
         test: /\.(png|jpe?g|gif)$/,
         use: [
           {
-            loader: 'file-loader',
+            loader: 'url-loader',
+            options: {
+              publicPath: './dist/',
+              name: 'images/[name].[ext]?[hash]',
+            },
           },
         ],
       },

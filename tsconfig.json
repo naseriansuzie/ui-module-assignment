@@ -22,8 +22,9 @@
       "@components/*": ["src/components/*"],
       "@styles/*": ["src/styles/*"],
       "@type/*": ["src/types/*"]
-    }
+    },
+    "typeRoots": ["images.d.ts"]
   },
-  "include": ["src", "**/*.d.ts"],
+  "include": ["src", "**/*.d.ts", "images.d.ts"],
   "exclude": ["node_modules"]
 }
