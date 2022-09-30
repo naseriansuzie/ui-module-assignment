@@ -1,61 +1,81 @@
 import React from 'react';
-import { DIRECTION_TYPE } from '@type/index';
+import Stars from '@components/Stars';
+import { DIRECTION_TYPE, RATINGS } from '@type/index';
 import styled, { css } from 'styled-components';
 
 interface CardProps {
   className?: string;
   direction: DIRECTION_TYPE;
   image: string;
-  rating?: number;
+  rating?: RATINGS;
   title: string;
 }
 
 interface HorizontalCardProps extends CardProps {
   direction: DIRECTION_TYPE.HORIZONTAL;
-  author: string;
-  description?: string;
+  description: string;
+  reviewer: string;
 }
 
 interface VerticalCardProps extends CardProps {
   direction: DIRECTION_TYPE.VERTICAL;
-  description: string;
+  description?: string;
   highlightedKeyword: string;
   label: string;
   omittedKeyword: string;
 }
 
 function Card(props: HorizontalCardProps | VerticalCardProps) {
-  if (props.direction === DIRECTION_TYPE.HORIZONTAL) {
-    const { className, description, direction, image, title } = props;
+  if (props.direction === DIRECTION_TYPE.VERTICAL) {
+    const {
+      className,
+      description,
+      direction,
+      highlightedKeyword,
+      image,
+      label,
+      omittedKeyword,
+      rating,
+      title,
+    } = props;
     return (
       <StyledCard className={className} direction={direction}>
         <StyledImageContainer direction={direction}>
           <StyledImage aria-label="카드 이미지" role="img" src={image} />
         </StyledImageContainer>
-        <StyledAdditionalInfo direction={direction}>
+        <StyledCardInfo>
+          <StyledLabel>{label}</StyledLabel>
           <StyledTitle>{title}</StyledTitle>
-          <StyledDescription>{description}</StyledDescription>
-        </StyledAdditionalInfo>
-        <StyledReviewInfo></StyledReviewInfo>
+          <StyledAdditionalInfo direction={direction}>
+            <StyledHighlightKeyword>{highlightedKeyword}</StyledHighlightKeyword>
+            <StyledOmittedKeyword>{omittedKeyword}</StyledOmittedKeyword>
+          </StyledAdditionalInfo>
+        </StyledCardInfo>
+        {typeof rating === 'number' && (
+          <StyledReviewInfo>
+            <Stars rating={rating} />
+            {description && (
+              <StyledDescription direction={direction}>{description}</StyledDescription>
+            )}
+          </StyledReviewInfo>
+        )}
       </StyledCard>
     );
   }
 
-  const { className, direction, highlightedKeyword, image, label, omittedKeyword, title } = props;
+  const { className, description, direction, image, rating, reviewer, title } = props;
   return (
     <StyledCard className={className} direction={direction}>
       <StyledImageContainer direction={direction}>
         <StyledImage aria-label="카드 이미지" role="img" src={image} />
       </StyledImageContainer>
-      <StyledCardInfo>
-        <StyledLabel>{label}</StyledLabel>
+      <StyledAdditionalInfo direction={direction}>
         <StyledTitle>{title}</StyledTitle>
-        <StyledAdditionalInfo direction={direction}>
-          <StyledHighlightKeyword>{highlightedKeyword}</StyledHighlightKeyword>
-          <StyledOmittedKeyword>{omittedKeyword}</StyledOmittedKeyword>
-        </StyledAdditionalInfo>
-        <StyledReviewInfo></StyledReviewInfo>
-      </StyledCardInfo>
+        <StyledDescription direction={direction}>{description}</StyledDescription>
+        <StyledRatingInfo>
+          {typeof rating === 'number' && <Stars rating={rating} reviewer={reviewer} />}
+        </StyledRatingInfo>
+      </StyledAdditionalInfo>
     </StyledCard>
   );
 }
@@ -70,13 +90,17 @@ const StyledCard = styled.li<{ direction: DIRECTION_TYPE }>`
   border: 0.1rem solid #d9d9d9;
   border-radius: 0.5rem;
   ${({ direction }) =>
-    direction === DIRECTION_TYPE.VERTICAL &&
-    css`
-      -webkit-box-orient: vertical;
-      -moz-flex-direction: column;
-      -ms-flex-direction: column;
-      flex-direction: column;
-    `};
+    direction === DIRECTION_TYPE.HORIZONTAL
+      ? css`
+          min-width: 55.5rem;
+        `
+      : css`
+          -webkit-box-orient: vertical;
+          -moz-flex-direction: column;
+          -ms-flex-direction: column;
+          flex-direction: column;
+          min-width: 19.5rem;
+        `};
 `;
 
 const StyledImageContainer = styled.div<{ direction: DIRECTION_TYPE }>`
@@ -123,7 +147,9 @@ const StyledAdditionalInfo = styled.div<{ direction: DIRECTION_TYPE }>`
           -moz-flex-direction: column;
           -ms-flex-direction: column;
           flex-direction: column;
-          padding: 1.5rem;
+          flex: 1;
+          -ms-flex: 0 1 auto;
+          padding: 0 2rem;
         `
       : css`
           -webkit-box-align: center;
@@ -133,7 +159,15 @@ const StyledAdditionalInfo = styled.div<{ direction: DIRECTION_TYPE }>`
         `};
 `;
 
-const StyledReviewInfo = styled.div``;
+const StyledReviewInfo = styled.div`
+  border-top: 0.1rem solid #d9d9d9;
+  padding: 0.5rem 1.5rem;
+`;
+
+const StyledRatingInfo = styled.div`
+  position: absolute;
+  bottom: 1rem;
+`;
 
 const StyledLabel = styled.p`
   color: #999999;
@@ -142,24 +176,27 @@ const StyledLabel = styled.p`
 `;
 
 const StyledTitle = styled.p`
-  font-size: 1.8rem;
+  font-size: 2rem;
   font-weight: 500;
   text-overflow: ellipsis;
   overflow: hidden;
-  margin-bottom: 1rem;
+  margin: 1.5rem 0 1.8rem;
 `;
 
-const StyledDescription = styled.span`
+const StyledDescription = styled.div<{ direction: DIRECTION_TYPE }>`
   display: -webkit-box;
   display: -moz-box;
   display: -ms-flexbox;
-  font-size: 1.3rem;
+  color: #999999;
+  font-size: 1.6rem;
+  line-height: 1.7;
   width: 100%;
   white-space: pre-line;
   text-overflow: ellipsis;
   overflow: hidden;
-  -webkit-line-clamp: 4;
+  -webkit-line-clamp: ${({ direction }) => (direction === DIRECTION_TYPE.HORIZONTAL ? 4 : 1)};
   -webkit-box-orient: vertical;
+  ${({ direction }) => direction === DIRECTION_TYPE.VERTICAL && `margin-top: 0.3rem;`};
 `;
 
 const StyledHighlightKeyword = styled.span`
