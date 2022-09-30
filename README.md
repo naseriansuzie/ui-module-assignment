@@ -13,7 +13,7 @@
 ## 🎬 UI별 화면
 
 - Card Component
-  <img width="587" alt="cards" src="https://user-images.githubusercontent.com/53066365/193233514-50855e1c-55ca-4dee-be83-b3a14e85a61a.png">
+<img width="587" alt="cards" src="https://user-images.githubusercontent.com/53066365/193233514-50855e1c-55ca-4dee-be83-b3a14e85a61a.png">
 
 - Form Component
-  <img width="587" alt="forms" src="https://user-images.githubusercontent.com/53066365/193233583-4343608c-98b8-4738-ba71-6fe74c709bae.png">
+<img width="587" alt="forms" src="https://user-images.githubusercontent.com/53066365/193233583-4343608c-98b8-4738-ba71-6fe74c709bae.png">
