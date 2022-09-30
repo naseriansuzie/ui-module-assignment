@@ -1,5 +1,26 @@
 # ui-module-assignment
 
+### :round_pushpin: 실행
+- node v16.17.0
+- yarn dev 실행
+- http://localhost:3000 진입
+
+### 🛠 Stack
+- Typescript, Styled-component, Formik
+
+###  🗂️ 프로젝트 구조
+```
+ 📂 src
+  ┣ 📂 assets
+  ┣ 📂 components
+  ┣ 📂 styles
+  ┣ 📂 types
+  ┣ 📜 App
+  ┣ 📜 index
+  ┗ 📂 types
+```
+
+
 ## :heavy_check_mark: 구현 항목
 
 - [x] 카드 UI 구현
