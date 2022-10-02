@@ -62,7 +62,7 @@ function Form({
       readOnly={readOnly}
       onSubmit={handleSubmit}
     >
-      <StyledInputBox showBoxOnly={showBoxOnly}>
+      <StyledInputBox isActive={!disabled && !readOnly} showBoxOnly={showBoxOnly}>
         <StyledTextContainer>
           <StyledTextarea
             disabled={disabled}
@@ -111,14 +111,27 @@ const StyledForm = styled.form<{ disabled: boolean; readOnly: boolean }>`
     `}
 `;
 
-const StyledInputBox = styled.div<{ showBoxOnly?: boolean }>`
+const StyledInputBox = styled.div<{ isActive: boolean; showBoxOnly: boolean }>`
   position: relative;
   border: 0.1rem solid #d9d9d9;
   padding: 1rem 0 1rem 1.5rem;
 
   &:focus-within {
-    border-color: rgba(254, 123, 48);
+    ${({ isActive }) => isActive && `border-color: rgba(254, 123, 48)`};
   }
+
+  @supports not selector(:focus-within) {
+    &:active {
+      ${({ isActive }) =>
+        isActive &&
+        css`
+          border-width: 0.1rem;
+          border-style: solid;
+          border-color: rgba(254, 123, 48);
+        `};
+    }
+  }
+
   ${({ showBoxOnly }) =>
     showBoxOnly
       ? css`
@@ -141,10 +154,12 @@ const StyledTextContainer = styled.div`
 const StyledTextarea = styled.textarea<{ disabled: boolean; readOnly: boolean }>`
   font-size: 1.6rem;
   line-height: 1.7;
-  background: inherit;
+  background: transparent;
   border: 0;
   width: 100%;
+  height: 100%;
   resize: none;
+
   :focus-within {
     outline: 0;
   }

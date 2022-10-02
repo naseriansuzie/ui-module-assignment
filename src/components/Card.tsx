@@ -184,6 +184,7 @@ const StyledTitle = styled.p`
 `;
 
 const StyledDescription = styled.div<{ direction: DIRECTION_TYPE }>`
+  position: relative;
   display: -webkit-box;
   display: -moz-box;
   display: -ms-flexbox;
@@ -191,12 +192,35 @@ const StyledDescription = styled.div<{ direction: DIRECTION_TYPE }>`
   font-size: 1.6rem;
   line-height: 1.7;
   width: 100%;
+  height: calc(2rem * ${({ direction }) => (direction === DIRECTION_TYPE.HORIZONTAL ? 4 : 1)});
   white-space: pre-line;
   text-overflow: ellipsis;
+  word-break: break-all;
   overflow: hidden;
-  -webkit-line-clamp: ${({ direction }) => (direction === DIRECTION_TYPE.HORIZONTAL ? 4 : 1)};
   -webkit-box-orient: vertical;
   ${({ direction }) => direction === DIRECTION_TYPE.VERTICAL && `margin-top: 0.3rem;`};
+
+  &::after {
+    position: absolute;
+    display: block;
+    bottom: 0;
+    right: 0;
+    background: #f8f9fb;
+    width: 5%;
+    height: calc(1.7 * 1em);
+    text-align: right;
+    content: '...';
+  }
+
+  @supports (-webkit-line-clamp: 1) {
+    height: auto;
+    -webkit-line-clamp: ${({ direction }) => (direction === DIRECTION_TYPE.HORIZONTAL ? 4 : 1)};
+    padding-right: 0;
+
+    ::after {
+      display: none !important;
+    }
+  }
 `;
 
 const StyledHighlightKeyword = styled.span`
